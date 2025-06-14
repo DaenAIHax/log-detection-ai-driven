@@ -1,6 +1,5 @@
 # log-detection-ai-driven
 
-# Log Detection AI-Driven
 
 > Multi-pipeline AI system for intelligent log anomaly detection and cybersecurity threat analysis
 
