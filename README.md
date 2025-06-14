@@ -2,10 +2,132 @@
 
 
 > Multi-pipeline AI system for intelligent log anomaly detection and cybersecurity threat analysis
+![Architecture](https://img.shields.io/badge/architecture-multi--pipeline-blue.svg)
+![ML Models](https://img.shields.io/badge/models-3%20specialized-green.svg)
+![Efficiency](https://img.shields.io/badge/efficiency-70%25%20reduction-orange.svg)
+
 
 ## Overview
 
 This project implements an intelligent log analysis system featuring **3 specialized ML pipelines** designed to detect different types of cybersecurity threats. The system combines supervised and unsupervised learning approaches to provide comprehensive security monitoring.
+
+# Multi-Pipeline Log Detection Architecture
+
+## System Architecture Diagram
+
+```mermaid
+graph TD
+    A[Raw Log Data] --> B[Log Preprocessing]
+    B --> C[Feature Engineering]
+    C --> D[TF-IDF Vectorization]
+    C --> E[Temporal Features]
+    C --> F[Severity Encoding]
+    
+    D --> G{Pipeline Router}
+    E --> G
+    F --> G
+    
+    G --> H[Pipeline 1: Isolation Forest]
+    G --> I[Pipeline 2: Random Forest]
+    G --> J[Pipeline 3: LSTM Network]
+    
+    H --> K{Normal?}
+    K -->|Yes| L[Pass to Pipeline 2]
+    K -->|No| M[Anomaly Alert]
+    
+    L --> N[Random Forest Analysis]
+    N --> O{Suspicious?}
+    O -->|Yes| P[Detailed Analysis]
+    O -->|No| Q[Cleared]
+    
+    J --> R[Temporal Pattern Analysis]
+    R --> S{APT Detected?}
+    S -->|Yes| T[Advanced Threat Alert]
+    S -->|No| U[Normal Sequence]
+    
+    M --> V[Alert Correlation System]
+    P --> V
+    T --> V
+    V --> W[Final Security Report]
+    
+    style H fill:#e1f5fe
+    style I fill:#f3e5f5
+    style J fill:#e8f5e8
+    style V fill:#fff3e0
+    style W fill:#ffebee
+```
+
+## Pipeline Specialization
+
+```mermaid
+graph LR
+    subgraph "Pipeline 1: Quick Filtering"
+        A1[Isolation Forest<br/>Unsupervised] --> A2[Normal Log Filter<br/>~70% Reduction]
+    end
+    
+    subgraph "Pipeline 2: Precision Analysis"
+        B1[Random Forest<br/>Supervised] --> B2[Anomaly Classification<br/>High Precision]
+    end
+    
+    subgraph "Pipeline 3: Temporal Analysis"
+        C1[LSTM Network<br/>Sequential] --> C2[APT Detection<br/>Pattern Recognition]
+    end
+    
+    A2 --> B1
+    style A1 fill:#e1f5fe
+    style B1 fill:#f3e5f5
+    style C1 fill:#e8f5e8
+```
+
+## Data Flow Architecture
+
+```mermaid
+flowchart TD
+    subgraph "Data Ingestion"
+        D1[NASA BGL Dataset<br/>1B+ Logs] --> D2[Custom Parser<br/>100K Subset]
+    end
+    
+    subgraph "Feature Engineering"
+        F1[Text Processing] --> F2[TF-IDF Vectors]
+        F3[Timestamp Analysis] --> F4[Temporal Features]
+        F5[Log Severity] --> F6[Categorical Encoding]
+    end
+    
+    subgraph "Model Training"
+        M1[Isolation Forest<br/>100% Normal Logs]
+        M2[Random Forest<br/>50/50 Balanced]
+        M3[LSTM<br/>Sequence Patterns]
+    end
+    
+    subgraph "Detection Engine"
+        E1[Real-time Processing] --> E2[Multi-model Inference]
+        E2 --> E3[Alert Generation]
+    end
+    
+    D2 --> F1
+    D2 --> F3
+    D2 --> F5
+    
+    F2 --> M1
+    F2 --> M2
+    F4 --> M3
+    F6 --> M2
+    
+    M1 --> E2
+    M2 --> E2
+    M3 --> E2
+    
+    style D1 fill:#f0f0f0
+    style E3 fill:#ffebee
+```
+
+## Key Features
+
+- ** Cascade Design**: 70% computational load reduction
+- ** Multi-Algorithm**: Isolation Forest + Random Forest + LSTM
+- ** Real-time**: Streaming log processing capability
+- ** Specialized**: Each pipeline targets specific threat types
+- ** Correlation**: Advanced alert correlation system
 
 ##  Architecture
 
