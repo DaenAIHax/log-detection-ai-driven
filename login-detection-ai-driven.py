@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[5]:
-
 
 # cascade_log_detection.py - Cascata Intelligente per Log Anomaly Detection
 
@@ -37,12 +35,8 @@ df_logs = pd.read_csv('test_logs_2.csv')  # Corretto: test_logs.csv non test_log
 print("✅ Modelli e dataset caricati con successo!")
 print(f"📊 Dataset shape: {df_logs.shape}")
 
-# TODO: Implementare preprocessing
-# TODO: Implementare cascata intelligente
-# TODO: Implementare metriche performance
 
 
-# In[6]:
 
 
 def preprocess_bgl_features(df):
@@ -51,7 +45,7 @@ def preprocess_bgl_features(df):
     from sklearn.preprocessing import LabelEncoder
     import pandas as pd
 
-    print("🔄 Preprocessing BGL features...")
+    print("Preprocessing BGL features...")
 
     # 1. Severity encoding
     severity_encoder = LabelEncoder()
@@ -75,11 +69,8 @@ def preprocess_bgl_features(df):
     tfidf_df = pd.DataFrame(tfidf_features, columns=[f'tfidf_{i}' for i in range(tfidf_features.shape[1])])
     final_features = pd.concat([df_features.reset_index(drop=True), tfidf_df.reset_index(drop=True)], axis=1)
 
-    print(f"   ✅ Features create: {final_features.shape}")
+    print(f"    Features create: {final_features.shape}")
     return final_features
-
-
-# In[7]:
 
 
 def cascade_detection(df_logs, isolation_model, random_forest_model):
@@ -89,14 +80,14 @@ def cascade_detection(df_logs, isolation_model, random_forest_model):
     Stage 2: Random Forest classifica solo i sospetti (preciso)
     """
 
-    print("🚀 Avvio cascata detection...")
+    print("Avvio cascata detection...")
     start_time = time.time()
 
     # PREPROCESSING: Crea features appropriate
     X_processed = preprocess_bgl_features(df_logs)
 
     # STAGE 1: Isolation Forest - Filtro veloce
-    print("📊 Stage 1: Isolation Forest filtering...")
+    print("Stage 1: Isolation Forest filtering...")
 
     # Usa le prime features che dovrebbero matchare il training
     n_features_iso = isolation_model.n_features_in_
@@ -111,14 +102,14 @@ def cascade_detection(df_logs, isolation_model, random_forest_model):
     normal_count = np.sum(stage1_predictions == 1)
     suspicious_count = np.sum(suspicious_mask)
 
-    print(f"   ✅ Log normali filtrati: {normal_count} ({normal_count/len(df_logs)*100:.1f}%)")
-    print(f"   ⚠️  Log sospetti per Stage 2: {suspicious_count} ({suspicious_count/len(df_logs)*100:.1f}%)")
+    print(f"    Log normali filtrati: {normal_count} ({normal_count/len(df_logs)*100:.1f}%)")
+    print(f"    Log sospetti per Stage 2: {suspicious_count} ({suspicious_count/len(df_logs)*100:.1f}%)")
 
     # STAGE 2: Random Forest solo sui sospetti
     print("🔍 Stage 2: Random Forest classification...")
 
     if suspicious_count == 0:
-        print("   ℹ️  Nessun log sospetto trovato - tutti classificati come normali")
+        print("     Nessun log sospetto trovato - tutti classificati come normali")
         final_predictions = np.ones(len(df_logs))  # Tutti normali
         confidence_scores = np.abs(stage1_scores)
     else:
@@ -142,10 +133,10 @@ def cascade_detection(df_logs, isolation_model, random_forest_model):
     anomalies_count = np.sum(final_predictions == 0)  # Assumendo 0 = anomalia
     total_time = time.time() - start_time
 
-    print(f"\n📈 RISULTATI CASCATA:")
-    print(f"   🎯 Anomalie rilevate: {anomalies_count}")
-    print(f"   ⚡ Tempo totale: {total_time:.2f}s")
-    print(f"   🚀 Riduzione carico Stage 2: {(1-suspicious_count/len(df_logs))*100:.1f}%")
+    print(f"\n RISULTATI CASCATA:")
+    print(f"    Anomalie rilevate: {anomalies_count}")
+    print(f"    Tempo totale: {total_time:.2f}s")
+    print(f"    Riduzione carico Stage 2: {(1-suspicious_count/len(df_logs))*100:.1f}%")
 
     return {
         'predictions': final_predictions,
@@ -157,24 +148,20 @@ def cascade_detection(df_logs, isolation_model, random_forest_model):
     }
 
 
-
-# In[8]:
-
-
 def lstm_apt_detection(df_logs, lstm_model, sequence_length=10, threshold=0.5):
     """
     Analisi LSTM separata per rilevamento APT
     Analizza l'intera sequenza temporale per pattern avanzati
     """
 
-    print("🧠 Avvio LSTM APT Detection...")
+    print(" Avvio LSTM APT Detection...")
     start_time = time.time()
 
     # Ordina i log per timestamp per analisi sequenziale
     df_sorted = df_logs.sort_values('timestamp_unix').reset_index(drop=True)
 
     # Prepara sequenze temporali complete
-    print("   🔄 Preparando sequenze temporali...")
+    print("    Preparando sequenze temporali...")
     timestamps = df_sorted['timestamp_unix'].values
 
     # Normalizza timestamps
@@ -190,7 +177,7 @@ def lstm_apt_detection(df_logs, lstm_model, sequence_length=10, threshold=0.5):
         sequence_indices.append(list(range(i, i + sequence_length)))
 
     if len(sequences) == 0:
-        print("   ⚠️  Dataset troppo piccolo per analisi sequenziale")
+        print("     Dataset troppo piccolo per analisi sequenziale")
         return {
             'apt_detected': False,
             'suspicious_sequences': [],
@@ -199,10 +186,10 @@ def lstm_apt_detection(df_logs, lstm_model, sequence_length=10, threshold=0.5):
         }
 
     X_lstm = np.array(sequences).reshape(-1, sequence_length, 1)
-    print(f"   ✅ Sequenze create: {X_lstm.shape}")
+    print(f"    Sequenze create: {X_lstm.shape}")
 
     # Predizione LSTM
-    print("   🔍 Analizzando pattern temporali...")
+    print("    Analizzando pattern temporali...")
     lstm_predictions = lstm_model.predict(X_lstm, verbose=0)
     lstm_scores = lstm_predictions.flatten()
 
@@ -210,9 +197,9 @@ def lstm_apt_detection(df_logs, lstm_model, sequence_length=10, threshold=0.5):
     apt_mask = lstm_scores > threshold
     apt_sequences = np.where(apt_mask)[0]
 
-    print(f"   📊 Sequenze analizzate: {len(sequences)}")
-    print(f"   ⚠️  Pattern APT rilevati: {len(apt_sequences)}")
-    print(f"   🎯 Score medio: {np.mean(lstm_scores):.3f}")
+    print(f"    Sequenze analizzate: {len(sequences)}")
+    print(f"    Pattern APT rilevati: {len(apt_sequences)}")
+    print(f"    Score medio: {np.mean(lstm_scores):.3f}")
 
     # Dettagli sequenze sospette
     suspicious_details = []
@@ -247,8 +234,6 @@ def lstm_apt_detection(df_logs, lstm_model, sequence_length=10, threshold=0.5):
         'sequence_indices': sequence_indices
     }
 
-
-# In[9]:
 
 
 def generate_security_alerts(cascade_results, lstm_results):
@@ -315,40 +300,35 @@ def generate_security_alerts(cascade_results, lstm_results):
 
     # Stampa alerts
     if not alerts:
-        print("   ✅ Nessun alert generato - sistema sicuro")
+        print("    Nessun alert generato - sistema sicuro")
     else:
-        print(f"   🚨 {len(alerts)} alert generati:")
+        print(f"    {len(alerts)} alert generati:")
         for i, alert in enumerate(alerts, 1):
             print(f"      {i}. [{alert['severity']}] {alert['type']}: {alert['message']}")
 
     return alerts
 
 
-# In[10]:
-
-
 # ESECUZIONE PARALLELA
 print("\n" + "="*60)
-print("🎯 SISTEMA DUAL DETECTION: FOREST CASCADE + LSTM APT")
+print(" SISTEMA DUAL DETECTION: FOREST CASCADE + LSTM APT")
 print("="*60)
 
 # 1. Cascata Forest (anomalie classiche)
-print("\n1️⃣ CASCATA FOREST - Anomalie Classiche")
+print("\n CASCATA FOREST - Anomalie Classiche")
 cascade_results = cascade_detection(df_logs, model_isolation, model_random)
 
 # 2. LSTM separato (APT detection)  
-print("\n2️⃣ LSTM ANALYSIS - APT Detection")
+print("\n LSTM ANALYSIS - APT Detection")
 lstm_results = lstm_apt_detection(df_logs, model_lstm)
 
 
-# In[13]:
-
 
 # 3. Sistema di alert intelligente
-print("\n3️⃣ ALERT SYSTEM")
+print("\n ALERT SYSTEM")
 security_alerts = generate_security_alerts(cascade_results, lstm_results)
 
-print(f"\n🎯 SUMMARY:")
+print(f"\n SUMMARY:")
 print(f"   Forest Anomalies: {np.sum(cascade_results['predictions'] == 0)}")
 print(f"   APT Patterns: {len(lstm_results['suspicious_sequences']) if lstm_results['apt_detected'] else 0}")
 print(f"   Security Alerts: {len(security_alerts)}")
@@ -356,19 +336,17 @@ print(f"   Total Processing Time: {cascade_results['total_time'] + lstm_results[
 
 
 
-# In[14]:
-
 
 # Esegui la cascata
 print("\n" + "="*50)
-print("🎯 AVVIO CASCATA INTELLIGENTE")
+print(" AVVIO CASCATA INTELLIGENTE")
 print("="*50)
 
 results = cascade_detection(df_logs, model_isolation, model_random)
 
-print(f"\n✅ Cascata completata!")
-print(f"📊 Predictions shape: {results['predictions'].shape}")
-print(f"🎯 Anomalie totali: {np.sum(results['predictions'] == 0)}")
+print(f"\n Cascata completata!")
+print(f" Predictions shape: {results['predictions'].shape}")
+print(f" Anomalie totali: {np.sum(results['predictions'] == 0)}")
 
 
 # In[ ]:
