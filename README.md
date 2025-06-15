@@ -15,47 +15,57 @@ This project implements an intelligent log analysis system featuring **3 special
 
 ## System Architecture Diagram
 
-```mermaid
 graph TD
     A[Raw Log Data] --> B[Log Preprocessing]
     B --> C[Feature Engineering]
     C --> D[TF-IDF Vectorization]
-    C --> E[Temporal Features]
+    C --> E[Temporal Features] 
     C --> F[Severity Encoding]
     
-    D --> G{Pipeline Router}
-    E --> G
+    %% Pipeline 1: Real-time
+    D --> G[Pipeline 1: Real-time Detection]
     F --> G
+    G --> H[Isolation Forest]
+    H --> I{Anomaly?}
+    I -->|Yes| J[Random Forest]
+    I -->|No| K[Normal]
+    J --> L{Threat?}
+    L -->|Yes| M[Real-time Alert]
+    L -->|No| N[Filtered]
     
-    G --> H[Pipeline 1: Isolation Forest]
-    G --> I[Pipeline 2: Random Forest]
-    G --> J[Pipeline 3: LSTM Network]
+    %% Pipeline 2: Delayed
+    D --> O[Pipeline 2: Delayed Analysis]
+    E --> O
+    F --> O
+    O --> P[Random Forest Zero-day]
+    P --> Q{Zero-day?}
+    Q -->|Yes| R[Zero-day Alert]
+    Q -->|No| S[Normal]
     
-    H --> K{Normal?}
-    K -->|Yes| L[Pass to Pipeline 2]
-    K -->|No| M[Anomaly Alert]
+    %% Pipeline 3: Temporal
+    E --> T[Pipeline 3: Temporal Analysis]
+    T --> U[LSTM Network]
+    U --> V{APT Pattern?}
+    V -->|Yes| W[APT Alert]
+    V -->|No| X[Normal]
     
-    L --> N[Random Forest Analysis]
-    N --> O{Suspicious?}
-    O -->|Yes| P[Detailed Analysis]
-    O -->|No| Q[Cleared]
+    %% Alert System
+    M --> Y[Alert Correlation]
+    R --> Y
+    W --> Y
+    Y --> Z[Security Report]
     
-    J --> R[Temporal Pattern Analysis]
-    R --> S{APT Detected?}
-    S -->|Yes| T[Advanced Threat Alert]
-    S -->|No| U[Normal Sequence]
+    %% Normal Flow
+    K --> AA[Log Archive]
+    N --> AA
+    S --> AA
+    X --> AA
     
-    M --> V[Alert Correlation System]
-    P --> V
-    T --> V
-    V --> W[Final Security Report]
-    
-    style H fill:#e1f5fe
-    style I fill:#f3e5f5
-    style J fill:#e8f5e8
-    style V fill:#fff3e0
-    style W fill:#ffebee
-```
+    style G fill:#e1f5fe
+    style O fill:#fff3e0
+    style T fill:#e8f5e8
+    style Y fill:#f3e5f5
+    style Z fill:#ffebee
 
 ## Pipeline Specialization
 
