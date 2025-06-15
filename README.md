@@ -62,7 +62,7 @@ flowchart TD
     style T fill:#e8f5e8
     style Y fill:#f3e5f5
     style Z fill:#ffebee
-```mermaid
+
 
 ## Pipeline Specialization
 
