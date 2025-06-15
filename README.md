@@ -14,6 +14,7 @@ This project implements an intelligent log analysis system featuring **3 special
 # Multi-Pipeline Log Detection Architecture
 
 ## System Architecture Diagram
+
 ```mermaid
 flowchart TD
     A[Raw Log Data] --> B[Log Preprocessing]
@@ -67,6 +68,7 @@ flowchart TD
     style Y fill:#f3e5f5
     style Z fill:#ffebee
 ```mermaid
+
 ## Pipeline Specialization
 
 ```mermaid
