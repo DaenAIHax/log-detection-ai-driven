@@ -15,7 +15,7 @@ This project implements an intelligent log analysis system featuring **3 special
 
 ## System Architecture Diagram
 
-graph TD
+flowchart TD
     A[Raw Log Data] --> B[Log Preprocessing]
     B --> C[Feature Engineering]
     C --> D[TF-IDF Vectorization]
