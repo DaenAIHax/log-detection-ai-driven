@@ -1,14 +1,11 @@
 # log-detection-ai-driven
-
-
 > Multi-pipeline AI system for intelligent log anomaly detection and cybersecurity threat analysis
+
 ![Architecture](https://img.shields.io/badge/architecture-multi--pipeline-blue.svg)
 ![ML Models](https://img.shields.io/badge/models-3%20specialized-green.svg)
 ![Efficiency](https://img.shields.io/badge/efficiency-70%25%20reduction-orange.svg)
 
-
 ## Overview
-
 This project implements an intelligent log analysis system featuring **3 specialized ML pipelines** designed to detect different types of cybersecurity threats. The system combines supervised and unsupervised learning approaches to provide comprehensive security monitoring.
 
 # Multi-Pipeline Log Detection Architecture
@@ -62,7 +59,7 @@ flowchart TD
     style T fill:#e8f5e8
     style Y fill:#f3e5f5
     style Z fill:#ffebee
-
+```
 
 ## Pipeline Specialization
 
