@@ -23,7 +23,6 @@ flowchart TD
     C --> E[Temporal Features] 
     C --> F[Severity Encoding]
     
-    %% Pipeline 1: Real-time
     D --> G[Pipeline 1: Real-time Detection]
     F --> G
     G --> H[Isolation Forest]
@@ -34,7 +33,6 @@ flowchart TD
     L -->|Yes| M[Real-time Alert]
     L -->|No| N[Filtered]
     
-    %% Pipeline 2: Delayed
     D --> O[Pipeline 2: Delayed Analysis]
     E --> O
     F --> O
@@ -43,20 +41,17 @@ flowchart TD
     Q -->|Yes| R[Zero-day Alert]
     Q -->|No| S[Normal]
     
-    %% Pipeline 3: Temporal
     E --> T[Pipeline 3: Temporal Analysis]
     T --> U[LSTM Network]
     U --> V{APT Pattern?}
     V -->|Yes| W[APT Alert]
     V -->|No| X[Normal]
     
-    %% Alert System
     M --> Y[Alert Correlation]
     R --> Y
     W --> Y
     Y --> Z[Security Report]
     
-    %% Normal Flow
     K --> AA[Log Archive]
     N --> AA
     S --> AA
