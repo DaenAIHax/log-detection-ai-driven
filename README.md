@@ -143,15 +143,15 @@ The system is built around three complementary detection pipelines:
 - **Goal**: Reduce false positives while maintaining high detection accuracy
 - **Efficiency**: ~70% computational load reduction through intelligent filtering
 
-### **Pipeline 2: APT Pattern Detection** 
-- **LSTM Neural Network** → Analyzes temporal patterns in log sequences
-- **Focus**: Advanced Persistent Threats (APT) detection
-- **Method**: Sequential pattern analysis for sophisticated attack identification
-
-### **Pipeline 3: Zero-Day Detection** 
+### **Pipeline 2: Zero-Day Detection** 
 - **Random Forest** → Analyzes logs classified as "normal" by Pipeline 1
 - **Goal**: Identify subtle anomalies and potential zero-day attacks
 - **Status**: *Not implemented due to computational constraints*
+
+### **Pipeline 3: APT Pattern Detection** 
+- **LSTM Neural Network** → Analyzes temporal patterns in log sequences
+- **Focus**: Advanced Persistent Threats (APT) detection
+- **Method**: Sequential pattern analysis for sophisticated attack identification
 
 ## Proof of Concept Status
 
